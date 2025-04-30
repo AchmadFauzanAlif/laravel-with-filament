@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,13 +32,23 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->label('Nama Pegawai')
+                    ->searchable(),
+                TextColumn::make('email'),
+                TextColumn::make('phone')
+                    ->label('No. Telepon'),
+                TextColumn::make('address')
+                    ->label('Alamat'),
+                TextColumn::make('joining_date')
+                    ->label('Tanggal Bergabung')
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label('Ubah Data'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
