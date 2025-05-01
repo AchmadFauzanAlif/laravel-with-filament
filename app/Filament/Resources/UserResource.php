@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -13,6 +14,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Get;
+use Filament\Tables\Columns\ImageColumn;
 
 class UserResource extends Resource
 {
@@ -24,7 +31,26 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                    ->label('Nama Pegawai')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->email()
+                    ->required(),
+                TextINput::make('password')
+                    ->password()
+                    ->required(),
+                TextInput::make('phone')
+                    ->tel()
+                    ->required(),
+                DateTimePicker::make('joining_date')
+                    ->required(),
+                Textarea::make('address')
+                    ->required(),
+                FileUpload::make('photo')
+
+                    ->columnSpan(2),
             ]);
     }
 
@@ -32,6 +58,8 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('photo')
+                    ->label('Foto'),
                 TextColumn::make('name')
                     ->label('Nama Pegawai')
                     ->searchable(),
@@ -47,8 +75,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label('Ubah Data'),
+                Tables\Actions\EditAction::make()->label('Ubah Data'),
+                // Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
