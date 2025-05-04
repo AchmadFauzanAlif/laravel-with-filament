@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LeaveTypesResource\Pages;
 use App\Filament\Resources\LeaveTypesResource\RelationManagers;
-use App\Models\leave_types;
 use App\Models\LeaveTypes;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LeaveTypesResource extends Resource
 {
-    protected static ?string $model = leave_types::class;
+    protected static ?string $model = LeaveTypes::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -24,7 +23,12 @@ class LeaveTypesResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('max_days')
+                    ->required()
+                    ->numeric(),
             ]);
     }
 
@@ -32,7 +36,19 @@ class LeaveTypesResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('max_days')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
