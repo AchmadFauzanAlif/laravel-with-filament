@@ -2,39 +2,42 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LeaveTypesResource\Pages;
-use App\Filament\Resources\LeaveTypesResource\RelationManagers;
-use App\Models\LeaveTypes;
+use App\Filament\Resources\LeaveResource\Pages;
+use App\Filament\Resources\LeaveResource\RelationManagers;
+use App\Models\Leave;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\FormsComponent;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class LeaveTypesResource extends Resource
+class LeaveResource extends Resource
 {
-    protected static ?string $model = LeaveTypes::class;
+    protected static ?string $model = Leave::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
-    protected static ?string $navigationLabel = 'Jenis Cuti';
-    protected static ?string $breadcrumb = 'Jenis Cuti';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Nama Jenis Cuti')
-                    ->placeholder('Nama Jenis Cuti')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
+                Forms\Components\DatePicker::make('start_date')
+                    ->required(),
+                Forms\Components\DatePicker::make('end_date')
+                    ->required(),
+                Forms\Components\Textarea::make('reason')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('max_days')
-                    ->label('Jumlah Cuti')
-                    ->placeholder('Masukkan Berapa Hari Cuti')
+                    ->columnSpanFull(),
+                Forms\Components\Select::make('type_leave_id')
+                    ->relationship('leave_type', 'name')
                     ->required()
-                    ->numeric(),
+
             ]);
     }
 
@@ -42,12 +45,17 @@ class LeaveTypesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Nama')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('max_days')
+                Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
-                    ->label('Jumlah Cuti')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('leave_type.name')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -82,9 +90,9 @@ class LeaveTypesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLeaveTypes::route('/'),
-            'create' => Pages\CreateLeaveTypes::route('/create'),
-            'edit' => Pages\EditLeaveTypes::route('/{record}/edit'),
+            'index' => Pages\ListLeaves::route('/'),
+            'create' => Pages\CreateLeave::route('/create'),
+            'edit' => Pages\EditLeave::route('/{record}/edit'),
         ];
     }
 }

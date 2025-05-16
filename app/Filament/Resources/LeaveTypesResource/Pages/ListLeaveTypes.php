@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListLeaveTypes extends ListRecords
 {
     protected static string $resource = LeaveTypesResource::class;
+    protected static ?string $title = 'Jenis Cuti';
 
     protected function getHeaderActions(): array
     {

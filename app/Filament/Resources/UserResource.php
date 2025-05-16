@@ -49,7 +49,6 @@ class UserResource extends Resource
                 Textarea::make('address')
                     ->required(),
                 FileUpload::make('photo')
-
                     ->columnSpan(2),
             ]);
     }

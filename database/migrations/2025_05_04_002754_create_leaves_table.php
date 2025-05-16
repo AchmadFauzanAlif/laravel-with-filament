@@ -18,8 +18,7 @@ return new class extends Migration
             $table->date("start_date");
             $table->date('end_date');
             $table->text('reason');
-            // $table->foreign('type_leave')->references('id')->on('leave_types')->onDelete('cascade');
-            $table->foreignId('type_leave')->constrained('leave_types')->casclcadeOnDelete();
+            $table->foreignId('type_leave_id')->constrained('leave_types')->casclcadeOnDelete();
             $table->timestamps();
         });
     }

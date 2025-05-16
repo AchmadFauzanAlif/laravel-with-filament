@@ -11,12 +11,17 @@ class Leave extends Model
         'user_id',
         'start_date',
         'end_date',
-        'type_leave',
-        'reason'
+        'reason',
+        'type_leave_id'
     ];
 
     public function leave_type(): BelongsTo
     {
-        return $this->belongsTo(LeaveTypes::class);
+        return $this->belongsTo(LeaveTypes::class, 'type_leave_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo((User::class));
     }
 }
